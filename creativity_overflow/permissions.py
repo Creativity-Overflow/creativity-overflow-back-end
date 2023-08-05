@@ -6,11 +6,13 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         # hover over SAFE_METHODS to see which qualify
         if request.method in permissions.SAFE_METHODS:
+            print("request",request)
             return True
 
         # if we're allowing the purchaser to be null in Model
         # then this will check for that case and allow access
-        if obj.owner is None:
+
+        if obj.artist_id is None:
             return True
 
-        return obj.owner == request.user
+        return obj.artist == request.user
