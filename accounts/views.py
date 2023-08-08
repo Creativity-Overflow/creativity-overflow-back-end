@@ -5,27 +5,24 @@ from .forms import CustomUserCreationForm
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
-from .models import CustomUser , Artist
-
-# class SignUpView(CreateView):
-
-#     form_class = CustomUserCreationForm
-#     success_url = reverse_lazy("login")
-#     template_name = "registration/signup.html"
-
+from .models import CustomUser
 
 @csrf_exempt
 def signup(request):
-    body = json.loads(request.body)
-    user = CustomUser.objects.create(username = body['username'], email = body['email'])
-    user.set_password(body['password'])
-    user.save()
-    return JsonResponse({'status': 'ok'})
+    if request.method == "POST":
+        body = json.loads(request.body)
+        user = CustomUser.objects.create(username=body['username'], email=body['email'])
+        user.set_password(body['password'])
+        user.save()
+        return JsonResponse({'status': 'ok'})
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 @csrf_exempt
 def signup_artist(request):
-    body = json.loads(request.body)
-    user = Artist.objects.create(username = body['username'], email = body['email'])
-    user.set_password(body['password'])
-    user.save()
-    return JsonResponse({'status': 'ok'})
+    if request.method == "POST":
+        body = json.loads(request.body)
+        user = CustomUser.objects.create(username=body['username'], email=body['email'], is_artist=True)
+        user.set_password(body['password'])
+        user.save()
+        return JsonResponse({'status': 'ok'})
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
