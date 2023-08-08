@@ -18,7 +18,7 @@ from django.urls import include, path
 from rest_framework_simplejwt import views as jwt_views
 from .views import MyTokenObtainPairView
 from django.views.generic.base import TemplateView
-
+from creativity_overflow.views import ArtList
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/arts/", include("creativity_overflow.urls")),
@@ -34,7 +34,7 @@ urlpatterns = [
         name="token_refresh",
     ),
     # path("art/", include("creativity_overflow.urls_front")),
-    path("", TemplateView.as_view(template_name="home.html"), name="home"),
+    path("", ArtList.as_view(), name="home"),
     path("about/", TemplateView.as_view(template_name="about.html"), name="about"),
     path("accounts/", include("accounts.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
