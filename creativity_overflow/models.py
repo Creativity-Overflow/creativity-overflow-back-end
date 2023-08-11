@@ -18,7 +18,8 @@ class Art(models.Model):
     current_price = models.DecimalField(default=0.00, max_digits=18, decimal_places=2, blank=True)
     description = models.TextField(default="", null=True, blank=True)
     category = models.CharField(max_length=30)
-    image = models.ImageField()
+    image = models.ImageField(upload_to='images/' , null=True , blank=True)
+
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField()
@@ -29,7 +30,7 @@ class Art(models.Model):
     def get_absolute_url(self):
         return reverse('art-list', args=[str(self.id)])
 
-    
+
 class Inventory(models.Model):
     name = models.CharField(max_length=256)
     artist = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
