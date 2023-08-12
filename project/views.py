@@ -10,6 +10,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom claims
         token["email"] = user.email
         token["username"] = user.username
+        token["is_artist"] = user.is_artist
+        token["image"] = str(user.image)
+        token["credits"] = str(user.credits)
         # ...
 
         return token
