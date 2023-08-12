@@ -24,8 +24,9 @@ def signup_artist(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.is_artist=True
             user = form.save()
+            user.is_artist = True  # Set the is_artist attribute
+            user.save()
             return JsonResponse({'status': 'ok'})
         else:
             return JsonResponse({'error': form.errors}, status=400)
