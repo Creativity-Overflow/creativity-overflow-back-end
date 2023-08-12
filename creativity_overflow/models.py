@@ -22,7 +22,7 @@ class Art(models.Model):
     highest_bidder = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='bidded_on_artworks',null=True,blank=True)
     current_price = models.DecimalField(default=0.00, max_digits=18, decimal_places=2, blank=True)
     description = models.TextField(default="", null=True, blank=True)
-    category = models.CharField(max_length=30, choices=STATUS_CHOICES ,default='physical_art' )
+    category = models.CharField(max_length=30, choices=CATEGORY_CHOICES ,default='physical_art' )
     image = models.ImageField(upload_to='images/' , null=True , blank=True)
 
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')
