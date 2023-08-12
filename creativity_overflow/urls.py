@@ -9,11 +9,14 @@ from .views import (
     ArtistArtDetail,
     SoldArt,
     Inventory_list,
-    Inventory_update,  # Change the name to Inventory_update instead of InventoryUpdate
+    Inventory_update,
     Customer_bidds,
-    Winned_bidds,  # Change the name to Winned_bidds instead of WonBids
+    Winned_bidds,
     Delete_art,
-    Sold_artist_art,  # Change the name to Sold_artist_art instead of SoldArtistArt
+    Sold_artist_art,
+    photography,
+    digitalArts,
+    physicalArts,
 )
 
 urlpatterns = [
@@ -28,4 +31,7 @@ urlpatterns = [
     path("won-bids/", Winned_bidds.as_view(), name="won-bids"),
     path("delete-art/<int:pk>/", Delete_art.as_view(), name="delete-art"),
     path("sold-artist-art/", Sold_artist_art.as_view(), name="sold-artist-art"),
+    path("physical/",physicalArts.as_view(),name="physical"),
+    path("digital/",digitalArts.as_view(),name="digital"),
+    path("photos/",photography.as_view(),name="photos"),
 ]

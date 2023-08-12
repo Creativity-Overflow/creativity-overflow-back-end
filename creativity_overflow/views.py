@@ -121,3 +121,15 @@ class Sold_artist_art(ListAPIView):
     def get_queryset(self):
         return Art.objects.filter(artist=self.request.user.id, status = 'Sold')
     
+class physicalArts(ListAPIView):
+    serializer_class = ArtSerializer
+    queryset = Art.objects.filter(category = "physical_art")
+
+class digitalArts(ListAPIView):
+    serializer_class = ArtSerializer
+    queryset = Art.objects.filter(category = "digital_art")
+
+class photography(ListAPIView):
+    serializer_class = ArtSerializer
+    queryset = Art.objects.filter(category = "photography")        
+    
