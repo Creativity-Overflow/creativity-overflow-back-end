@@ -109,6 +109,7 @@ class Winned_bidds(ListAPIView):
 # delete from art model
 class Delete_art(RetrieveDestroyAPIView):
     queryset = Art.objects.all()
+    
     serializer_class = ArtSerializer
     permission_class = [IsAdminUsers]
     def get_absolute_url(self):

@@ -3,9 +3,16 @@ from .models import Art , Inventory
 
 
 class ArtSerializer(serializers.ModelSerializer):
+    artist_name = serializers.CharField(source='artist.username', read_only=True)
+    highest_bidder_name = serializers.CharField(source='highest_bidder.username', read_only=True)
+
     class Meta:
         model = Art
-        fields = "__all__"
+        fields = [
+            'id', 'name', 'artist', 'artist_name', 'bidders', 'highest_bidder',
+            'highest_bidder_name', 'current_price', 'description', 'category',
+            'image', 'status', 'start_date', 'end_date'
+        ]
 
 class ArtCreateSerializer(serializers.ModelSerializer):
     class Meta:
