@@ -4,7 +4,7 @@ from django.db import models
 class CustomUser(AbstractUser):
     credits=models.DecimalField(default=10000.00,decimal_places=2,max_digits=18)
     is_artist = models.BooleanField(default=False)
-    image = models.ImageField(upload_to='images/' , null=True , blank=True)
+    image = models.ImageField(upload_to='images/' , null=True , blank=True, default="")
     # add additional fields in here
 
     def __str__(self):
