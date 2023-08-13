@@ -11,26 +11,37 @@ from decimal import Decimal
 @csrf_exempt
 def signup(request):
     if request.method == "POST":
-        form = CustomUserCreationForm(request.POST, request.FILES)
-        if form.is_valid():
-            user = form.save()
-            return JsonResponse({'status': 'ok'})
-        else:
-            return JsonResponse({'error': form.errors}, status=400)
-    return JsonResponse({'error': 'Method not allowed'}, status=405)
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            username = data.get('username')
+            email = data.get('email')
+            password = data.get('password1')
+            
+            user = CustomUser.objects.create(username=username, email=email)
+            user.set_password(password)
+            user.save()
+
+            return JsonResponse({'message': 'User created successfully'}, status=201)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
 
 @csrf_exempt
 def signup_artist(request):
     if request.method == "POST":
-        form = CustomUserCreationForm(request.POST, request.FILES)
-        if form.is_valid():
-            user = form.save()
-            user.is_artist = True  # Set the is_artist attribute
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            username = data.get('username')
+            email = data.get('email')
+            password = data.get('password1')
+            
+            user = CustomUser.objects.create(username=username, email=email)
+            user.is_artist = True
+            user.set_password(password)
             user.save()
-            return JsonResponse({'status': 'ok'})
-        else:
-            return JsonResponse({'error': form.errors}, status=400)
-    return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+            return JsonResponse({'message': 'User created successfully'}, status=201)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
 
 @csrf_exempt
 def update_credits(request):
