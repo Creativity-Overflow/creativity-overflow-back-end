@@ -6,6 +6,7 @@ from rest_framework.generics import (
     RetrieveDestroyAPIView,
     CreateAPIView,
 )
+from rest_framework.views import APIView
 from .models import Art, Inventory
 from .permissions import IsOwnerOrReadOnly , IsArtistOrReadOnly , IsOwnerArtist,IsAdminUsers
 from rest_framework.permissions import IsAuthenticated
@@ -13,6 +14,7 @@ from rest_framework.permissions import IsAdminUser
 from .serializers import ArtSerializer, Artist_art, InventorySerializer , PriceSerializer , ArtCreateSerializer
 from accounts.models import CustomUser
 from django.urls import reverse
+from django.http import JsonResponse
 
 # all art work
 class ArtList(ListCreateAPIView):
@@ -132,4 +134,20 @@ class digitalArts(ListAPIView):
 class photography(ListAPIView):
     serializer_class = ArtSerializer
     queryset = Art.objects.filter(category = "photography")        
-    
+
+class MoveRowView(APIView):
+    def post(self, request, source_id):
+        try:
+            art_row = Art.objects.get(id=source_id)
+            if art_row.current_price > 0 :
+                art_row.status = "sold"
+                art_row.save()
+            else:
+                inventory_instance = Inventory.objects.create(name=art_row.name,artist=art_row.artist,description=art_row.description,category=art_row.category,image=art_row.image)
+                inventory_instance.save()
+                art_row.delete()
+            return JsonResponse({'status': 'success'})
+        except Art.DoesNotExist:
+            return JsonResponse({'error': 'Source row not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)    

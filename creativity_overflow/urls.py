@@ -17,6 +17,7 @@ from .views import (
     photography,
     digitalArts,
     physicalArts,
+    MoveRowView,
 )
 
 urlpatterns = [
@@ -34,4 +35,5 @@ urlpatterns = [
     path("physical/",physicalArts.as_view(),name="physical"),
     path("digital/",digitalArts.as_view(),name="digital"),
     path("photos/",photography.as_view(),name="photos"),
+    path("move_row/<int:source_id>/",MoveRowView.as_view(),name="auto_move"),
 ]
