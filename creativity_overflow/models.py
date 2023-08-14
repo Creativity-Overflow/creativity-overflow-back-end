@@ -24,7 +24,6 @@ class Art(models.Model):
     description = models.TextField(default="", null=True, blank=True)
     category = models.CharField(max_length=30, choices=CATEGORY_CHOICES ,default='physical_art' )
     image = models.ImageField(upload_to='images/' , null=True , blank=True)
-
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField()

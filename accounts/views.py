@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-
+import jwt
 from .forms import CustomUserCreationForm
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -16,9 +16,11 @@ def signup(request):
             username = data.get('username')
             email = data.get('email')
             password = data.get('password1')
+            credits = Decimal(data.get('credits', "10000.00"))
             
             user = CustomUser.objects.create(username=username, email=email)
             user.set_password(password)
+            user.credits=credits
             user.save()
 
             return JsonResponse({'message': 'User created successfully'}, status=201)
@@ -33,10 +35,12 @@ def signup_artist(request):
             username = data.get('username')
             email = data.get('email')
             password = data.get('password1')
-            
+            credits = Decimal(data.get('credits', "10000.00"))
+
             user = CustomUser.objects.create(username=username, email=email)
             user.is_artist = True
             user.set_password(password)
+            user.credits=credits
             user.save()
 
             return JsonResponse({'message': 'User created successfully'}, status=201)
@@ -44,19 +48,17 @@ def signup_artist(request):
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
 
 @csrf_exempt
-def update_credits(request):
+def update_credits(request, pk):
     if request.method == "PUT":
         body = json.loads(request.body)
-        user = request.user
+        
         try:
-            instance = CustomUser.objects.get(id=user.id)
-            credits_value = body.get('credits')  # Use dictionary.get() to safely get the value
-            if credits_value is not None:
-                instance.credits = Decimal(credits_value)
-                instance.save()
-                return JsonResponse({'status': 'ok'})
-            else:
-                return JsonResponse({'error': 'Invalid credits value'}, status=400)
+            instance = CustomUser.objects.get(id=pk)
+            
+            credits_value = Decimal(body.get('credits', "10000.00"))
+            instance.credits = credits_value
+            instance.save()            
+            return JsonResponse({'status': 'ok'})
         except CustomUser.DoesNotExist:
             return JsonResponse({'error': 'User not found'}, status=404)
     return JsonResponse({'error': 'Method not allowed'}, status=405)

@@ -17,7 +17,7 @@ class ArtSerializer(serializers.ModelSerializer):
 class ArtCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Art
-        exclude = ['artist','bidders','highest_bidder','status','current_price']
+        exclude = ['artist','bidders','highest_bidder','current_price']
 
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
