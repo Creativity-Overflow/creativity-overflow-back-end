@@ -17,9 +17,18 @@ from django.urls import reverse
 from django.http import JsonResponse
 
 # all art work
-class ArtList(ListAPIView):
+class ArtList(ListCreateAPIView):
     queryset = Art.objects.all()
     serializer_class = ArtSerializer
+    permission_classes = [IsArtistOrReadOnly]
+    def perform_create(self, serializer):
+        serializer.save(artist=self.request.user)
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return ArtCreateSerializer
+        else:
+            return ArtSerializer
 
 # create Art
 # class CreateArt(CreateAPIView):
@@ -52,7 +61,7 @@ class ArtistArtList(ListCreateAPIView):
         if self.request.method == 'POST':
             return ArtCreateSerializer
         else:
-            return ArtSerializer    
+            return ArtSerializer
 
 # specific artist art
 class ArtistArtDetail(RetrieveUpdateAPIView):
@@ -91,7 +100,7 @@ class Customer_bidds(ListAPIView):
         user_id = self.request.user.id
         return Art.objects.filter(bidders__has_key=str(user_id))
 
-# all won bids regarding specific customer 
+# all won bids regarding specific customer
 class Winned_bidds(ListAPIView):
     serializer_class = ArtSerializer
 
@@ -101,18 +110,18 @@ class Winned_bidds(ListAPIView):
 # delete from art model
 class Delete_art(RetrieveDestroyAPIView):
     queryset = Art.objects.all()
-    
+
     serializer_class = ArtSerializer
     permission_class = [IsAdminUsers]
     def get_absolute_url(self):
         return reverse('art-list')
 
-# artist sell        
+# artist sell
 class Sold_artist_art(ListAPIView):
     serializer_class = ArtSerializer
     def get_queryset(self):
         return Art.objects.filter(artist=self.request.user.id, status = 'Sold')
-    
+
 class physicalArts(ListAPIView):
     serializer_class = ArtSerializer
     queryset = Art.objects.filter(category = "physical_art")
@@ -123,7 +132,7 @@ class digitalArts(ListAPIView):
 
 class photography(ListAPIView):
     serializer_class = ArtSerializer
-    queryset = Art.objects.filter(category = "photography")        
+    queryset = Art.objects.filter(category = "photography")
 
 class MoveRowView(APIView):
     def post(self, request, source_id):
@@ -140,4 +149,4 @@ class MoveRowView(APIView):
         except Art.DoesNotExist:
             return JsonResponse({'error': 'Source row not found'}, status=404)
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)    
+            return JsonResponse({'error': str(e)}, status=500)
