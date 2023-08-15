@@ -16,10 +16,12 @@ def signup(request):
             username = data.get('username')
             email = data.get('email')
             password = data.get('password1')
+            image=data.get('image')
             credits = Decimal(data.get('credits', "10000.00"))
             
             user = CustomUser.objects.create(username=username, email=email)
             user.set_password(password)
+            user.image=image
             user.credits=credits
             user.save()
 

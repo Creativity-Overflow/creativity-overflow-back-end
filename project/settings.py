@@ -13,7 +13,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 import environ
-
+from azure.storage.blob import BlobServiceClient
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -187,6 +187,12 @@ STATICFILES_DIRS = [
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# Azure Storage settings
+AZURE_ACCOUNT_NAME = 'creativeart'
+AZURE_STORAGE_CONNECTION_STRING = 'DefaultEndpointsProtocol=https;AccountName=creativeart;AccountKey=Z0fWkHBSc6+Vyoz4+yW8MrP8r6CbwsU0M+bjXa8ZHVEj3yb3QVLJtHfucs/lt5ymBp7Pku7qh1yq+ASta7mGmw==;EndpointSuffix=core.windows.net'
+AZURE_ACCOUNT_KEY = 'Z0fWkHBSc6+Vyoz4+yW8MrP8r6CbwsU0M+bjXa8ZHVEj3yb3QVLJtHfucs/lt5ymBp7Pku7qh1yq+ASta7mGmw=='
+AZURE_CONTAINER = 'media'  # The container where your media files will be stored
+AZURE_URL_EXPIRATION_SECS = 3600  # URL expiration time for the media files
+
+# DEFAULT_FILE_STORAGE = 'creativity_overflow.azure_storage.AzureMediaStorage'
 
