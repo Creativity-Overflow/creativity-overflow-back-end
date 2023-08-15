@@ -3,7 +3,7 @@ from django.db import models
 from django.urls import reverse
 from accounts.models import CustomUser
 from django.db.models import JSONField
-
+from project.azure_utils import blob_service_client
 class Art(models.Model):
     STATUS_CHOICES = (
         ('available', 'Available'),
@@ -23,10 +23,22 @@ class Art(models.Model):
     current_price = models.DecimalField(default=0.00, max_digits=18, decimal_places=2, blank=True)
     description = models.TextField(default="", null=True, blank=True)
     category = models.CharField(max_length=30, choices=CATEGORY_CHOICES ,default='physical_art' )
-    image = models.ImageField(upload_to='images/' , null=True , blank=True)
+    image = models.CharField(max_length=1500 ,null=True , blank=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField()
+
+    # def save(self, *args, **kwargs):
+    #     # Check if image field is updated
+    #     if self._state.adding and self.image:
+    #         container_client = blob_service_client.get_container_client('media')
+    #         blob_client = container_client.get_blob_client(f'images/{self.image.name}')
+
+    #         # Upload the image to Azure Blob Storage
+    #         with self.image.open('rb') as image_file:
+    #             blob_client.upload_blob(image_file)
+
+    #     super(Art, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -40,7 +52,7 @@ class Inventory(models.Model):
     artist = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     description = models.TextField(default="", null=True, blank=True)
     category = models.CharField(max_length=30)
-    image = models.ImageField()
+    image = models.CharField(max_length=1500 ,null=True , blank=True)
     create_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
