@@ -37,11 +37,13 @@ def signup_artist(request):
             username = data.get('username')
             email = data.get('email')
             password = data.get('password1')
+            image=data.get('image')
             credits = Decimal(data.get('credits', "10000.00"))
 
             user = CustomUser.objects.create(username=username, email=email)
             user.is_artist = True
             user.set_password(password)
+            user.image=image
             user.credits=credits
             user.save()
 
@@ -64,3 +66,14 @@ def update_credits(request, pk):
         except CustomUser.DoesNotExist:
             return JsonResponse({'error': 'User not found'}, status=404)
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+@csrf_exempt
+def getUser(request,pk):
+    user=CustomUser.objects.get(id=pk)
+    user_data = {
+            "id": user.id,
+            "username": user.username,
+            "credits":user.credits,
+            "image":user.image,
+        }
+    return JsonResponse(user_data)

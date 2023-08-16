@@ -21,6 +21,7 @@ class ArtList(ListCreateAPIView):
     queryset = Art.objects.all()
     serializer_class = ArtSerializer
     permission_classes = [IsArtistOrReadOnly]
+
     def perform_create(self, serializer):
         serializer.save(artist=self.request.user)
 
