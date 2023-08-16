@@ -17,9 +17,19 @@ from django.urls import reverse
 from django.http import JsonResponse
 
 # all art work
-class ArtList(ListAPIView):
+class ArtList(ListCreateAPIView):
     queryset = Art.objects.all()
     serializer_class = ArtSerializer
+    permission_classes = [IsArtistOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(artist=self.request.user)
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return ArtCreateSerializer
+        else:
+            return ArtSerializer
 
 # create Art
 # class CreateArt(CreateAPIView):
