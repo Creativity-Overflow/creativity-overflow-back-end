@@ -3,7 +3,7 @@ from django.db import models
 from django.urls import reverse
 from accounts.models import CustomUser
 from django.db.models import JSONField
-from project.azure_utils import blob_service_client
+
 class Art(models.Model):
     STATUS_CHOICES = (
         ('available', 'Available'),
