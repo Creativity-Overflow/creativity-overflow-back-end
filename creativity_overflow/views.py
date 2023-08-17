@@ -18,7 +18,7 @@ from django.http import JsonResponse
 
 # all art work
 class ArtList(ListCreateAPIView):
-    queryset = Art.objects.all()
+    queryset = Art.objects.filter(status = 'available')
     serializer_class = ArtSerializer
     permission_classes = [IsArtistOrReadOnly]
 
@@ -55,6 +55,7 @@ class ArtistArtList(ListCreateAPIView):
     serializer_class = ArtSerializer
 
     def get_queryset(self):
+        print(self.request.user)
         return Art.objects.filter(artist=self.request.user)
     def perform_create(self, serializer):
         serializer.save(artist=self.request.user)
@@ -73,7 +74,7 @@ class ArtistArtDetail(RetrieveUpdateAPIView):
 
 # all sold artworks
 class SoldArt(ListAPIView):
-    queryset = Art.objects.filter(status = 'Sold')
+    queryset = Art.objects.filter(status = 'sold')
     serializer_class = ArtSerializer
 
 # all artworks in inventory regarding specific user
@@ -106,7 +107,7 @@ class Winned_bidds(ListAPIView):
     serializer_class = ArtSerializer
 
     def get_queryset(self):
-        return Art.objects.filter(highest_bidder=self.request.user.id , status = 'Sold' )
+        return Art.objects.filter(highest_bidder=self.request.user.id , status = 'sold' )
 
 # delete from art model
 class Delete_art(RetrieveDestroyAPIView):
@@ -121,7 +122,9 @@ class Delete_art(RetrieveDestroyAPIView):
 class Sold_artist_art(ListAPIView):
     serializer_class = ArtSerializer
     def get_queryset(self):
-        return Art.objects.filter(artist=self.request.user.id, status = 'Sold')
+
+        return Art.objects.filter(artist=self.request.user.id, status = 'sold')
+    
 
 class physicalArts(ListAPIView):
     serializer_class = ArtSerializer
