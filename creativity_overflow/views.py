@@ -107,7 +107,7 @@ class Winned_bidds(ListAPIView):
     serializer_class = ArtSerializer
 
     def get_queryset(self):
-        return Art.objects.filter(highest_bidder=self.request.user.id , status = 'Sold' )
+        return Art.objects.filter(highest_bidder=self.request.user.id , status = 'sold' )
 
 # delete from art model
 class Delete_art(RetrieveDestroyAPIView):
